@@ -1,0 +1,61 @@
+body{
+    font-family:Consolas;
+}
+
+.line-number{
+    color:#404040;
+    background-color:#E0E0E0;
+    padding-left:0.5em;
+    padding-right:0.5em;
+    margin-right:0.5em;
+}
+
+.identifier{
+    color:#313131;
+}
+
+.keyword{
+    color:#0080FF;
+}
+
+.user-type{
+    color:#0080FF;
+}
+
+.external-type{
+    color:#0080FF;
+    font-style:italic;
+}
+
+.external-scope{
+    color:#0080FF;
+    font-style:italic;
+}
+
+.method{
+    color:#FF0000;
+}
+
+.macro{
+    color:#800080;
+}
+
+.enum-constant{
+    color:#FF8000;
+}
+
+.string{
+    color:#00A000;
+}
+
+.comment{
+    color:#00A000;
+}
+
+.character{
+    color:#00A000;
+}
+
+.preprocessor{
+    color:#0000FF;
+}
