@@ -2,7 +2,7 @@ body{
     font-family:Consolas;
 }
 
-.line-number{
+.ln{ /*line number*/
     color:#404040;
     background-color:#E0E0E0;
     padding-left:0.5em;
@@ -10,52 +10,52 @@ body{
     margin-right:0.5em;
 }
 
-.identifier{
+.id{ /*identifier*/
     color:#313131;
 }
 
-.keyword{
+.kw{ /*keyword*/
     color:#0080FF;
 }
 
-.user-type{
+.ut{ /*user type*/
     color:#0080FF;
 }
 
-.external-type{
-    color:#0080FF;
-    font-style:italic;
-}
-
-.external-scope{
+.et{ /*external type*/
     color:#0080FF;
     font-style:italic;
 }
 
-.method{
+.es{ /*external scope*/
+    color:#0080FF;
+    font-style:italic;
+}
+
+.fn{ /*method*/
     color:#FF0000;
 }
 
-.macro{
+.m{ /*macro*/
     color:#800080;
 }
 
-.enum-constant{
+.k{ /*constants*/
     color:#FF8000;
 }
 
-.string{
+.s{ /*string*/
     color:#00A000;
 }
 
-.comment{
+.c{ /*comment*/
     color:#00A000;
 }
 
-.character{
+.ch{ /*character*/
     color:#00A000;
 }
 
-.preprocessor{
+.p{ /*preprocessor*/
     color:#0000FF;
 }
