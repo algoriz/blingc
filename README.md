@@ -3,7 +3,7 @@
 BLING-C is a syntax highlight tool for C/C++ source code, and it prints
 highlighted code into HTML documents.
 
-This project is moved from google code([http://code.google.com/p/blingc]()) here.
+This project is moved from google code([http://code.google.com/p/blingc](http://code.google.com/p/blingc "http://code.google.com/p/blingc")) here.
 
 ### Usage
 
