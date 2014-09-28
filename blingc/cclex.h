@@ -14,32 +14,28 @@ typedef std::list<cc_name_def> cc_name_def_list;
 typedef std::vector<std::string>    string_vect;
 typedef std::set<std::string>       string_set;
 
-struct cc_keyword_set: public string_set
-{
+struct cc_keyword_set: public string_set{
     cc_keyword_set();
 
 private:
     static char _keywords[128][32];
 };
 
-struct cc_class_key_set: public string_set
-{
+struct cc_class_key_set: public string_set{
     cc_class_key_set();
 
 private:
     static char _class_key[3][8];
 };
 
-struct cc_base_specifier_set: public string_set
-{
+struct cc_base_specifier_set: public string_set{
     cc_base_specifier_set();
 
 private:
     static char _base_specifier[4][16];
 };
 
-struct cc_access_specifier_set: public string_set
-{
+struct cc_access_specifier_set: public string_set{
     cc_access_specifier_set();
 
 private:
@@ -48,30 +44,18 @@ private:
 /// Summary
 ///  Structure that marks a reference
 ///
-struct cc_reference
-{
-    struct less
-    {
-        bool operator()(const cc_reference& l, const cc_reference& r)
-        {
+struct cc_reference{
+    struct less {
+        bool operator()(const cc_reference& l, const cc_reference& r){
             return l.end <= r.begin;
         }
     };
 
-    cc_reference(): begin(0), end(0)
-    {
+    cc_reference(): begin(0), end(0) {}
 
-    }
+    cc_reference(size_t b, size_t e): begin(b), end(e){}
 
-    cc_reference(size_t b, size_t e): begin(b), end(e)
-    {
-
-    }
-
-    size_t length() const
-    {
-        return end - begin;
-    }
+    size_t length() const { return end - begin; }
 
     size_t begin;
     size_t end;     // end character is not included
@@ -85,8 +69,7 @@ typedef std::map<std::string, cc_reference_set>     cc_reference_map;
 ///  C++ source stream, an encapsulation of C++ source buffer
 ///  Support source files encoded with ANSI or UTF-8
 ///
-class cc_stream
-{
+class cc_stream {
 public:
     cc_stream();
     cc_stream(const cc_stream& rval);
@@ -156,8 +139,7 @@ public:
     ///  Read the referred content pointed by <wdref> from stream and append it to <wd>
     ///  This method does NOT check the boundary
     ///
-    bool read(const cc_reference& wdref, std::string& wd) const
-    {
+    bool read(const cc_reference& wdref, std::string& wd) const {
         wd.assign(_content+wdref.begin, wdref.length());
         return true;
     }
@@ -177,8 +159,7 @@ public:
 
     bool is_open() const { return _content != 0; }
 
-    int compare_at(size_t p, const char* dst, size_t cch) const
-    {
+    int compare_at(size_t p, const char* dst, size_t cch) const {
         return strncmp(_content+p, dst, cch);
     }
 
@@ -194,51 +175,35 @@ private:
     size_t  _buff_size;
 };
 
-struct cc_name_def
-{
+struct cc_name_def {
     std::string     name;
     cc_reference    name_ref;
 
     cc_name_def(){}
 
     cc_name_def(const std::string& n, size_t pos)
-        :name(n), name_ref(pos, pos+name.length())
-    {
-
-    }
+        :name(n), name_ref(pos, pos+name.length()){}
 
     cc_name_def(const std::string& n, const cc_reference& r)
-        :name(n), name_ref(r)
-    {
-
-    }
+        :name(n), name_ref(r) {}
 
     cc_name_def(const cc_stream& s, const cc_reference& r)
-        :name(s.content()+r.begin, r.length()), name_ref(r)
-    {
-
-    }
+        :name(s.content()+r.begin, r.length()), name_ref(r) {}
 
     cc_name_def(const cc_stream& s, size_t begin, size_t end)
-        :name(s.content()+begin, end-begin), name_ref(begin, end)
-    {
+        :name(s.content()+begin, end-begin), name_ref(begin, end) {}
 
-    }
-
-    void set_name(const std::string& n, size_t pos)
-    {
+    void set_name(const std::string& n, size_t pos){
         name = n;
         set_name_ref_begin(pos);
     }
 
-    void set_name_ref_begin(size_t begin)
-    {
+    void set_name_ref_begin(size_t begin){
         name_ref.begin = begin;
         name_ref.end = begin + name.length();
     }
 
-    void set_name_ref_end(size_t end)
-    {
+    void set_name_ref_end(size_t end){
         name_ref.end = end;
         name_ref.begin = end - name.length();
     }
@@ -248,15 +213,13 @@ typedef std::list<cc_name_def> cc_name_def_list;
 /// Summary
 ///  Describes a preprocessor reference
 ///
-struct cc_preprocessor_def: public cc_name_def
-{
+struct cc_preprocessor_def: public cc_name_def{
     cc_reference    line_ref;   // Address of preprocessor line
 };
 
 typedef std::list<cc_preprocessor_def>  cc_preprocessor_def_list;
 
-struct cc_entity_def: public cc_name_def
-{
+struct cc_entity_def: public cc_name_def {
     string_vect  nested_name;
     cc_reference body_ref;
 };
@@ -264,31 +227,26 @@ struct cc_entity_def: public cc_name_def
 /// Summary
 ///  Describes a enumeration definition
 ///
-struct cc_enum_def: public cc_entity_def
-{
+struct cc_enum_def: public cc_entity_def {
     cc_name_def_list value_def_list;
     
-    bool empty() const
-    {
+    bool empty() const {
         return name.size() || value_def_list.size();
     }
 
-    void clear()
-    {
+    void clear() {
         nested_name.clear();
         name.clear();
         value_def_list.clear();
     }
 
-    void set_name(size_t pos)
-    {
+    void set_name(size_t pos) {
         char temp[32];
         name.assign(temp, sprintf(temp, "unnamed_enum_%p", pos));
         name_ref.begin = name_ref.end = pos;
     }
 
-    void add_value(const std::string& val, size_t pos)
-    {
+    void add_value(const std::string& val, size_t pos) {
         value_def_list.push_back(cc_name_def(val, pos));
     }
 };
@@ -298,10 +256,8 @@ typedef std::list<cc_enum_def> cc_enum_def_list;
 /// Summary
 ///  Describes a class definition
 ///
-struct cc_class_def: public cc_entity_def
-{
-    void set_name(size_t pos)
-    {
+struct cc_class_def: public cc_entity_def {
+    void set_name(size_t pos) {
         char temp[32];
         name.assign(temp, sprintf(temp, "unnamed_class_%p", pos));
         name_ref.begin = name_ref.end = pos;
@@ -312,8 +268,7 @@ struct cc_class_def: public cc_entity_def
 
 typedef std::list<cc_class_def> cc_class_def_list;
 
-class cc_symbol_index
-{
+class cc_symbol_index {
 public:
     /// Summary
     ///  Parse C++ source stream
@@ -328,83 +283,67 @@ public:
     // Clear all symbol index information
     void clear();
 
-    const cc_enum_def_list& enum_def_list() const
-    {
+    const cc_enum_def_list& enum_def_list() const {
         return _enum_def_list;
     }
 
-    const cc_class_def_list& class_def_list() const
-    {
+    const cc_class_def_list& class_def_list() const {
         return _class_def_list;
     }
 
-    const cc_preprocessor_def_list& preprocessor_def_list() const
-    {
+    const cc_preprocessor_def_list& preprocessor_def_list() const {
         return _preprocessor_def_list;
     }
 
-    const cc_name_def_list& comment_def_list() const
-    {
+    const cc_name_def_list& comment_def_list() const {
         return _comment_def_list;
     }
 
-    const cc_name_def_list& string_def_list() const
-    {
+    const cc_name_def_list& string_def_list() const {
         return _string_def_list;
     }
 
-    const cc_name_def_list& character_def_list() const
-    {
+    const cc_name_def_list& character_def_list() const {
         return _character_def_list;
     }
 
-    const cc_name_def_list& include_def_list() const
-    {
+    const cc_name_def_list& include_def_list() const {
         return _include_def_list;
     }
 
-    const cc_name_def_list& macro_def_list() const
-    {
+    const cc_name_def_list& macro_def_list() const {
         return _macro_def_list;
     }
 
-    const cc_reference_map& keyword_ref_map() const
-    {
+    const cc_reference_map& keyword_ref_map() const {
         return _keyword_ref_map;
     }
 
-    const cc_reference_map& method_ref_map() const
-    {
+    const cc_reference_map& method_ref_map() const {
         return _method_ref_map;
     }
 
-    const cc_reference_map& class_ref_map() const
-    {
+    const cc_reference_map& class_ref_map() const {
         return _class_ref_map;
     }
 
-    const cc_reference_map& enum_ref_map() const
-    {
+    const cc_reference_map& enum_ref_map() const {
         return _enum_ref_map;
     }
 
-    const cc_reference_map& macro_ref_map() const
-    {
+    const cc_reference_map& macro_ref_map() const {
         return _macro_ref_map;
     }
 
-    const cc_reference_map& constant_ref_map() const
-    {
+    const cc_reference_map& constant_ref_map() const {
         return _constant_ref_map;
     }
 
-    const cc_reference_map& external_type_ref_map() const
-    {
+    const cc_reference_map& external_type_ref_map() const {
         return _external_type_ref_map;
     }
 
-    const cc_reference_map& external_scope_ref_map() const
-    {
+    const cc_reference_map& external_scope_ref_map() const {
         return _external_scope_ref_map;
     }
 
@@ -434,18 +373,14 @@ private:
 
 private:
     template<typename _def_list> void __resolve_type_ref(
-        const _def_list& dl, cc_name_def_list& id_list, cc_reference_map& ref_map)
-    {
+        const _def_list& dl, cc_name_def_list& id_list, cc_reference_map& ref_map) {
         string_set name_set;
-        for(_def_list::const_iterator it = dl.begin(); it != dl.end(); ++it)
-        {
+        for(_def_list::const_iterator it = dl.begin(); it != dl.end(); ++it) {
             name_set.insert(it->name);
         }
 
-        for(cc_name_def_list::iterator id = id_list.begin(); id != id_list.end();)
-        {
-            if( name_set.count(id->name) )
-            {
+        for(cc_name_def_list::iterator id = id_list.begin(); id != id_list.end();) {
+            if( name_set.count(id->name) ) {
                 ref_map[id->name].insert(id->name_ref);
                 id = id_list.erase(id);
             }
@@ -487,8 +422,7 @@ typedef std::map<std::string, cc_symbol_index>    cc_symbol_map;
 ///  Symbol index management
 ///
 ///
-class cc_symbol_base
-{
+class cc_symbol_base {
 public:
     bool add_file(const std::string& srcfile);
     bool remove_file(const std::string& srcfile);

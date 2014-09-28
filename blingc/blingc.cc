@@ -1,5 +1,6 @@
 #include "cclex.h"
-
+#include <stdio.h>
+#include <string.h>
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -89,28 +90,28 @@ int parse_arg(int argc, char* argv[], std::vector<std::string>& flist,
             continue;
         }
         
-        if (!strnicmp(argv[i], "--css=", 6)) {
+        if (!_strnicmp(argv[i], "--css=", 6)) {
             arglist[ck_html_style] = argv[i] + 6;
         }
-        else if (!strnicmp(argv[i], "--outdir=", 9)) {
+        else if (!_strnicmp(argv[i], "--outdir=", 9)) {
             arglist[ck_output_dir] = argv[i] + 9;
         }
-        else if (!strnicmp(argv[i], "--ln=", 5)) {
+        else if (!_strnicmp(argv[i], "--ln=", 5)) {
             if (argv[i][5] >= '1' && argv[i][5] <= '9') {
                 arglist[ck_lno_size] = argv[i] + 5;
             }
             else return i;
         }
-        else if (!strnicmp(argv[i], "--noheader", 10)) {
+        else if (!_strnicmp(argv[i], "--noheader", 10)) {
             arglist[ck_no_header] = "1";
         }
-        else if (!strnicmp(argv[i], "--tab=", 6)) {
+        else if (!_strnicmp(argv[i], "--tab=", 6)) {
             if (argv[i][6] >= '1' && argv[i][6] <= '9') {
                 arglist[ck_tab_size] = argv[i] + 6;
             }
             else return i;
         }
-        else if (!strnicmp(argv[i], "--stdout", 8)) {
+        else if (!_strnicmp(argv[i], "--stdout", 8)) {
             arglist[ck_std_chunk] = "1";
         }
         else{ return i; }
