@@ -90,15 +90,15 @@ std::pair<char, char> cc_stream::round_bracket('(', ')');
 std::pair<char, char> cc_stream::square_bracket('[', ']');
 std::pair<char, char> cc_stream::brace('{', '}');
 
-cc_stream::cc_stream() : _content(0), _buff_size(0), _length(0){}
+cc_stream::cc_stream() : _content(0), _length(0), _buff_size(0){}
 
 cc_stream::cc_stream(const char* fileName)
-    : _content(0), _buff_size(0), _length(0) {
+    : _content(0), _length(0), _buff_size(0){
     open(fileName);
 }
 
 cc_stream::cc_stream(const cc_stream& rval)
-    : _content(0), _buff_size(rval._buff_size), _length(rval._length) {
+    : _content(0), _length(rval._length), _buff_size(rval._buff_size) {
     if (_length) {
         _content = new char[_length];
         memcpy(_content, rval._content, _length);
@@ -563,7 +563,7 @@ void cc_symbol_index::_lex_string(cc_stream& scontext){
 
 void cc_symbol_index::_lex_character(cc_stream& scontext){
     size_t dfa_state = 0;
-    size_t begin;
+    size_t begin = 0;
 
     for (size_t i = 0; i < scontext.length(); ++i){
         char input_ch = scontext.content()[i];

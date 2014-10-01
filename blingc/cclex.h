@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <cstring>
+#include <cstdio>
 #include <vector>
 #include <set>
 #include <map>
@@ -375,12 +377,12 @@ private:
     template<typename _def_list> void __resolve_type_ref(
         const _def_list& dl, cc_name_def_list& id_list, cc_reference_map& ref_map) {
         string_set name_set;
-        for(_def_list::const_iterator it = dl.begin(); it != dl.end(); ++it) {
+        for (typename _def_list::const_iterator it = dl.begin(); it != dl.end(); ++it) {
             name_set.insert(it->name);
         }
 
-        for(cc_name_def_list::iterator id = id_list.begin(); id != id_list.end();) {
-            if( name_set.count(id->name) ) {
+        for (typename cc_name_def_list::iterator id = id_list.begin(); id != id_list.end();) {
+            if (name_set.count(id->name)) {
                 ref_map[id->name].insert(id->name_ref);
                 id = id_list.erase(id);
             }
